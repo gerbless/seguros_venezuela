@@ -23,7 +23,7 @@ use DB;
 use DOMDocument;
 use Illuminate\Http\Request;
 use App\Model\emisionXmlModel;
-
+use App\Model\clientesModel;
 class txtController extends Controller
 {
     public function __construct(request $request)
@@ -45,6 +45,7 @@ class txtController extends Controller
         $emision_asegurados=array();
         $emision_beneficiario=array();
         $emision_pagador=array();
+        $emision_clientes=array();
         $xml = new DomDocument('1.0', 'UTF-8');
         $desde = date('Y-m-d', strtotime($request->desde));
         $hasta = date('Y-m-d', strtotime($request->hasta));
@@ -262,6 +263,8 @@ class txtController extends Controller
                     }
                     array_push($emision_asegurados,$asegurado->id);
                     PolizaAseguradosModel::where('id',$asegurado->id)->update(['status_id' => 12]);
+
+
                 }
 
                 $polizaTomador = tomadorPolizaModel::with('direcciones')->where('clientes_id', $valuepolizaPagador->clientes_id)->first();
@@ -619,8 +622,11 @@ class txtController extends Controller
                 $comments = $xml->createElement('comments', 0);
                 $transaction->appendChild($comments);
                 $totalOperaciones++;
+//                ACTUALIZAR ESTADOS DE CLIENTES Y PAGADOR DE LA POLIZA AL IMPRIMIR
                 array_push($emision_pagador,$valuepolizaPagador->id);
+                array_push($emision_clientes,$valuepolizaPagador->clientes_id);
                 polizaPagadorModel::where('id',$valuepolizaPagador->id)->update(['status_id' => 12]);
+                clientesModel::where('id',$valuepolizaPagador->clientes_id)->update(['status_id' => 12]);
 
             }
 
