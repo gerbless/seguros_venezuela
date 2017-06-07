@@ -185,6 +185,12 @@
              $("#nu_medio_pago").inputmask({"mask": "5999-9999-9999-9999"});
              $("#nu_medio_pago").removeAttr("disabled");
              break;
+
+         case "5":
+             $("#nu_medio_pago").inputmask({"mask": "9999-9999-99-9999999999"});
+             $("#nu_medio_pago").removeAttr("disabled");
+             break;
+
          default:
              var jqxhr = $.get('cuenta-corriente/'+$("#banco_id").val());
              jqxhr.done(function(resul) {
