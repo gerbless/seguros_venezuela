@@ -22,7 +22,7 @@ use App\Model\tomadorPolizaModel;
 use DB;
 use DOMDocument;
 use Illuminate\Http\Request;
-
+use App\Model\emisionXmlModel;
 
 class txtController extends Controller
 {
@@ -42,13 +42,20 @@ class txtController extends Controller
     public function store(request $request)
     {
 
+        $emision_asegurados=array();
+        $emision_beneficiario=array();
+        $emision_pagador=array();
         $xml = new DomDocument('1.0', 'UTF-8');
         $desde = date('Y-m-d', strtotime($request->desde));
         $hasta = date('Y-m-d', strtotime($request->hasta));
-        $bancos = polizaPagadorModel::where('campana_id',$request->campana)
+        $bancos = polizaPagadorModel::where([
+            ['medio_pago_id',"<>",5],
+            ['campana_id',$request->campana]
+        ])
             ->whereNotNull('prima')
             ->whereBetween(DB::raw('DATE(ff_registro)'), [$desde, $hasta])
             ->distinct()
+            ->active()
             ->select('banco_id')->get();
 
         $insurance_transactions = $xml->createElement('insurance_transactions');
@@ -89,9 +96,11 @@ class txtController extends Controller
                 ->where([
                     ['campana_id', $request->campana],
                     ['banco_id', $value->banco_id],
+                    ['medio_pago_id',"<>",5],
                 ])
                 ->whereNotNull('prima')
                 ->whereBetween(DB::raw('DATE(ff_registro)'), [$desde, $hasta])
+                ->active()
                 ->get();
 
             foreach($polizaPagador as $valuepolizaPagador) {
@@ -251,6 +260,8 @@ class txtController extends Controller
                         $legal_person->appendChild($office_telephone2);
 
                     }
+                    array_push($emision_asegurados,$asegurado->id);
+                    PolizaAseguradosModel::where('id',$asegurado->id)->update(['status_id' => 12]);
                 }
 
                 $polizaTomador = tomadorPolizaModel::with('direcciones')->where('clientes_id', $valuepolizaPagador->clientes_id)->first();
@@ -536,6 +547,8 @@ class txtController extends Controller
                     $porcentaje = (100 / $numBeneficiarios);
                     $percentage = $xml->createElement('percentage', round($porcentaje));
                     $coverage->appendChild($percentage);
+                    array_push($emision_beneficiario,$benefiarios->id);
+                    beneficiariosModel::where('id',$benefiarios->id)->update(['status_id' => 12]);
                 }
 
                 $receipt = $xml->createElement('receipt');
@@ -606,6 +619,9 @@ class txtController extends Controller
                 $comments = $xml->createElement('comments', 0);
                 $transaction->appendChild($comments);
                 $totalOperaciones++;
+                array_push($emision_pagador,$valuepolizaPagador->id);
+                polizaPagadorModel::where('id',$valuepolizaPagador->id)->update(['status_id' => 12]);
+
             }
 
         }
@@ -617,6 +633,17 @@ class txtController extends Controller
         $sponsor = sponsorModel::find($request->sponsor);
         $lote = loteXmlModel::all()->first();
         $campana = campanaModel::find($request->campana);
+        emisionXmlModel::create([
+            "users_id"=>\Auth::user()->id,
+            "desde"=>$desde,
+            "hasta"=>$hasta,
+            "claves"=>json_encode(["ID_EMITIDOS"=>
+                array('emision_pagador'=>$emision_pagador,
+                    'emision_asegurados'=>$emision_asegurados,
+                    'emision_beneficiario'=>$emision_beneficiario)
+            ]),
+            "status_id"=>1,
+        ]);
 
         $nom = 'DIREC_' . $sponsor->nb_sponsor . '_' . date('dmY', strtotime($desde)) . '_' . $campana->nb_campana . '_' . date('dmY', strtotime($hasta)) . '_' . $lote->nu_lote . '_EMIS.xml';
         $xml->save($nom);

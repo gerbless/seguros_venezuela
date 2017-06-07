@@ -12,12 +12,12 @@ class AlterClientesLote extends Migration
      * @return void
      */
     public function up()
-    {
-        Schema::table('clientes', function (Blueprint $table) {
-            $table->integer('lote_id')->unsigned()->after('users_id')->nullable();
-            $table->foreign('lote_id')->references('id')->on('lote_masivo')->OnDelete('cascade')->OnUpdate('cascade');
-        });
-    }
+{
+    Schema::table('clientes', function (Blueprint $table) {
+        $table->integer('lote_id')->unsigned()->after('users_id')->nullable();
+        $table->foreign('lote_id')->references('id')->on('lote_masivo')->OnDelete('cascade')->OnUpdate('cascade');
+    });
+}
 
     /**
      * Reverse the migrations.
@@ -25,9 +25,9 @@ class AlterClientesLote extends Migration
      * @return void
      */
     public function down()
-    {
-        Schema::table('clientes', function (Blueprint $table) {
-            //
-        });
-    }
+{
+    Schema::table('clientes', function (Blueprint $table) {
+        //
+    });
+}
 }
