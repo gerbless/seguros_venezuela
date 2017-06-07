@@ -105,7 +105,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('clientes-noventa','backEnd\callCenterController@index');
     Route::get('clientes-efectiva','backEnd\callCenterController@index');
     Route::get('cliente-ya-es-cliente','backEnd\callCenterController@index');
-    
+    Route::get('clientes-enviadas','backEnd\callCenterController@index');
 
     //GESTIONAR DATA TIPIFICADOR
     Route::get('editar-gesion-cliente/{idCliente}', 'backEnd\callCenterController@edit');
