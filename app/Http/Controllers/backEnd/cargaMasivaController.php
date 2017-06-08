@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\backEnd;
 
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\loteMasivoModel;
@@ -21,6 +22,10 @@ class cargaMasivaController extends Controller
         return view('back_end.cargamasiva.carga',compact('campana_id','sponsor'));
     }
     public function getArchivo(Request $request){
+
+           \Debugbar::info($request->plan_id);
+
+
             $archivo= $request->file('sel_file');
             $nombre_original = $archivo->getClientOriginalName();
             $extension = $archivo->getClientOriginalExtension();
@@ -48,7 +53,7 @@ class cargaMasivaController extends Controller
                                  str_replace('.0','',$fila->nacionalidad),
                                  str_replace('.0','',$fila->sexo),
                                  str_replace('.0','',$fila->edo_civil),
-                                 $request->plan_id,
+                                 implode(',',$request->plan_id),
                                  round($fila->edad),
                                  $request->campana_id,
                                  $request->ramo_id,

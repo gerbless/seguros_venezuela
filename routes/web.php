@@ -273,7 +273,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('tarifario/{id}/{idRamo}/{idProducto}/{idPlan}/{idFrecuencia}', ['as' => 'tarifario', 'uses' => 'backEnd\combosController@getTarifario']);
     Route::get('autocombo/{id}/{funcion}', ['as' => 'autocombo', 'uses' => 'backEnd\combosController@getAutocombo']);
     Route::get('cuenta-corriente/{idBanco}/', ['as' => 'cuenta-corriente', 'uses' => 'backEnd\combosController@getcuentaCorriente']);
-    
+    Route::get('multiples-planes', ['as' => 'multiples-planes', 'uses' => 'backEnd\combosController@getPlanSelect2']);
 });
 
 

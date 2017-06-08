@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\backEnd;
 
 
-use App\Model\bacosModel;
+
 use App\Model\ciudadesModel;
 use App\Model\municipiosModel;
+use Barryvdh\Debugbar\Middleware\Debugbar;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\tpfnivel1Model;
@@ -17,7 +18,6 @@ use App\Model\ramosModel;
 use App\Model\productosModel;
 use App\Model\planesModel;
 use App\Model\tarifarioModel;
-
 class combosController extends Controller
 {
     protected  $id;
@@ -74,13 +74,14 @@ class combosController extends Controller
 
     public function getPlan(request $request)
     {
+      //  \Debugbar::info(intval($request->plan_cliente));
+
         if($request->plan_cliente=="undefined")
         {
             $data =productosModel::find($this->id)->planes->where('status_id',1);
         }else{
-            $data=planesModel::where(['producto_id'=>$this->id,'id'=>$request->plan_cliente])->get();
+            $data=planesModel::where('producto_id',$this->id)->whereIn('id',explode(',',$request->plan_cliente))->active()->get();
         }
-
         return response()->json($data);
     }
 
@@ -124,6 +125,24 @@ class combosController extends Controller
         return $banco->cuenta." ".$banco->codigo;
     }
 
+    public function getPlanSelect2(request $request)
+    {
+        $data=planesModel::where([
+            ['producto_id',$request->id_producto],
+            ['nb_plan','like',$request->nom_plan."%"]
+        ])
+            ->pluck('nb_plan','id');
+
+        foreach ($data as $id=>$plan)
+        {
+            $planes[]=['id' => $id, 'text' => $plan];
+        }
+
+        return response()->json($planes);
+
+        
+
+    }
 
 
 

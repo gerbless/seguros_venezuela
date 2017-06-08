@@ -64,8 +64,8 @@
                 </div>
 
                 <div class="form-group col-xs-6">
-                    <apan style="color:red">*</apan> {!!Form::label('plan_id','Plan:')!!}
-                    {!!Form::select('plan_id',array(), null, ['id' => 'plan_id','class' => 'form-control','placeholder'=>'..:: SELECCIONE ::..','required'=>'required'] )!!}
+                    <apan style="color:red">*</apan> {!!Form::label('plan_id','Plan:')!!}<br>
+                    {!!Form::select('plan_id[]',array(), null, ['style'=>'width:100%;','multiple' => 'multiple','id' => 'plan_id','required'=>'required'] )!!}
                 </div>
 
                 <br>
@@ -87,7 +87,39 @@
       </div>
     </div>
 </div>
+<script type="text/javascript">
 
+       $.fn.select2.defaults.set("theme", "classic");
+        // inicializamos el plugin
+        $('#plan_id').select2({
+            // Activamos la opcion "Tags" del plugin
+            tags: true,
+            placeholder: '..:: SELECCIONE ::..',
+//            minimumInputLength: 4,
+            tokenSeparators: [','],
+            ajax: {
+                dataType: 'json',
+                url: '{{ url("multiples-planes") }}',
+                {{--url: function (params) {--}}
+                    {{--return '{{ url("multiples-planes") }}/' + params.term + '/'+ $ ("#producto_id").val()--}}
+                {{--},--}}
+                delay: 250,
+                data: function(params) {
+
+                        return {
+                           nom_plan: params.term,
+                          id_producto: $("#producto_id").val()
+                    }
+                },
+                processResults: function (data, page) {
+                    return {
+                        results: data
+                    };
+                },
+            }
+        });
+
+</script>
 
 
 @include('back_end.combos')

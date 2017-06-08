@@ -69,6 +69,10 @@ class clientesModel extends Model
         return $this->hasMany(tomadorPolizaModel::class,'clientes_id');
     }
 
+    public function aseguradoPoliza(){
+        return $this->hasMany(PolizaAseguradosModel::class,'cliente_id');
+    }
+
     public function datosRiesgoAsegurables(){
         return $this->hasMany(datosRiesgoAsegurable::class,"clientes_id");
     }

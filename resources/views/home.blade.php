@@ -33,10 +33,10 @@
     <link rel="stylesheet" href="plugins/TableFilter-master/dist/tablefilter/style/tablefilter.css">
     <!-- TIMER -->
     <link rel="stylesheet" href="plugins/timepicker/bootstrap-timepicker.min.css">
-
+      <!-- ESTILO APLICACION -->
      <link rel="stylesheet" href="css/sistemalaravel.css">
-
-
+      <!-- SELECT 2 -->
+      <link rel="stylesheet" href="plugins/select2/select2.min.css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -257,13 +257,11 @@
     <script src="js/push.min.js"></script>
     <!-- INPUT-MASK -->
     <script src="plugins/input-mask/jquery.inputmask.js"></script>
-
-
+    <!-- SELECT 2 -->
+    <script src="plugins/select2/select2.js"></script>
 
  <!-- javascript del sistema laravel -->
    <script src="js/sistemalaravel.js"></script>
-    <script src="js/highcharts.js"></script>
-
     <!-- cheeditor -->
     <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
   </body>
