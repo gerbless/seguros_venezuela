@@ -646,7 +646,8 @@ class txtController extends Controller
             "claves"=>json_encode(["ID_EMITIDOS"=>
                 array('emision_pagador'=>$emision_pagador,
                     'emision_asegurados'=>$emision_asegurados,
-                    'emision_beneficiario'=>$emision_beneficiario)
+                    'emision_beneficiario'=>$emision_beneficiario,
+                     'emision_clientes'=>$emision_clientes)
             ]),
             "status_id"=>1,
         ]);

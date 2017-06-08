@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class emisionXmlModel extends Model
@@ -11,6 +12,10 @@ class emisionXmlModel extends Model
 
     public function status(){
         return $this->belongsTo(statusModel::class);
+    }
+
+    public function users(){
+        return $this->belongsTo(User::class,"users_id");
     }
     public function scopeActive($query)
     {

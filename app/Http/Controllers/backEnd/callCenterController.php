@@ -16,11 +16,18 @@ use App\Model\submenuModel;
 use App\User;
 use App\Model\campanaModel;
 use App\Model\planesModel;
+use App\Model\bacosModel;
+use App\Model\mediosPagoModel;
+use App\Model\emisionXmlModel;
 class callCenterController extends Controller
 {
-    protected $acction;
+    private $acction;
     protected $muestra;
-
+    private $tipoGestion="back_end.gestion.index";
+    private $bancos=null;
+    private $medio_pago=null;
+    private $emision_xml=null;
+    
     public function __construct(request $request)
     {
         $this->acction = $request->decodedPath();
@@ -35,12 +42,31 @@ class callCenterController extends Controller
         if(\Auth::user()->tipo=="AGENTES"){
             $data = \Auth::user()->clientes()->where('status_id',$acceso->status_id)->orderBy('updated_at','desc')->get();
         }else{
-            $data =clientesModel::with('lotes')->where('status_id',$acceso->status_id)->orderBy('lote_id','asc')->limit(3000)->get();
+            $data =clientesModel::with('lotes','polizaPagador','aseguradoPoliza')->where('status_id',$acceso->status_id)->orderBy('lote_id','asc')->limit(3000)->get();
+            //DETERMINO QUE SI LA VISTA DEBE MOSTRAR DATOS DE LA VENTA
+            if($acceso->status_id==12){
+                $this->tipoGestion="back_end.manipulacion_ventas.index";
+                $this->medio_pago = mediosPagoModel::active()->pluck('nb_medio_pago', 'id');
+                $this->bancos = bacosModel::active()->pluck('nb_banco', 'id');
+                $dataEmi=emisionXmlModel::with('users')->active()->get();
+               foreach ($dataEmi as $item){
+                   $this->emision_xml[$item->id][$item->users->name]=json_decode($item->claves);
+               }
+                
+//                $this->emision_xml=array_pluck($arr,"ID_EMITIDOS.emision_pagador");
+           
+            }
         }
-        return view('back_end.gestion.index', compact('agentes','data'))
+        
+
+        
+        return view($this->tipoGestion, compact('agentes','data'))
             ->with('ruta_actual',$this->acction)
             ->with('carpeta',$acceso->nombre)
-            ->with('icon',$acceso->icon);
+            ->with('icon',$acceso->icon)
+            ->with('bancos',$this->bancos)
+            ->with('emision_xml',$this->emision_xml)
+            ->with('medios_pago',$this->medio_pago);
     }
 
     public function edit($gestionar)
