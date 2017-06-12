@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Event;
 class tarifarioModel extends Model
 {
     protected $table="tarifario";
-    protected $fillable=["campana_id","ramo_id","producto_id","plan_id","frecuencia_pago_id","prima","status_id"];
+    protected $fillable=["campana_id","ramo_id","producto_id","plan_id","frecuencia_pago_id","prima","suma_total_asegurados","aplica_rango","rangoedad_id","status_id"];
 
     public function campanas(){
         return $this->belongsTo(campanaModel::class,"campana_id");
@@ -35,14 +35,14 @@ class tarifarioModel extends Model
         return $this->belongsTo(statusModel::class,"status_id");
     }
 
+    public function rangoedad(){
+        return $this->belongsTo(rangoEdadModel::class,'rangoedad_id');
+    }
+
     public function scopeActive($query)
     {
         return $query->where('status_id',1);
     }
-
-    protected $events = [
-        'created' => UserSaved::class,
-        'deleted' => UserDeleted::class,
-    ];
+    
 
 }
