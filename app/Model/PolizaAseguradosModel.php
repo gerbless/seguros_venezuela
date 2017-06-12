@@ -34,6 +34,7 @@ class PolizaAseguradosModel extends Model
         "activida_economica_id",
         "nu_capital_promedio",
         "tarifario_id",
+        "edad",
         "status_id"
     ];
 

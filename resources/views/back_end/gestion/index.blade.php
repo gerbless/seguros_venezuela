@@ -38,7 +38,7 @@
                         <td class="text-center">{{ $item->id }}</td>
                         @if($item->status_id==5)
                             <td class="text-bold">
-                               @if($item->agendamientos()->count() > 0)
+                               @if($item->agendamientos->count() > 0)
                                     <span class="text-blue" style="font-size: 12px"> {{ date('d-m-Y g:i a',strtotime($item->agendamientos()->orderby('created_at','desc')->first()->ff_hh_agendado)) }} </span>
                                   @else
                                     <span class="text-red">Sin Fecha N/A</span>

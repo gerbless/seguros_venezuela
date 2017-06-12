@@ -26,7 +26,7 @@
     {!!Form::text('nb_nombre',null,['class'=>'form-control','placeholder'=>'Nombre o Razón social','required'=>'required','maxlength'=>'60'])!!}
 </div>
 
-<div class="form-group col-xs-2" style="display: none;">
+<div class="form-group col-xs-2">
     <br>
     <button onclick="nuevoAseguradoPoliza();" type="button" disabled="disabled" class="btn btn-bitbucket btnnuevoaseguradopoliza">
         <i class="fa fa-male" aria-hidden="true"></i>

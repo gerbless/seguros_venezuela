@@ -42,7 +42,7 @@ class callCenterController extends Controller
         if(\Auth::user()->tipo=="AGENTES"){
             $data = \Auth::user()->clientes()->where('status_id',$acceso->status_id)->orderBy('updated_at','desc')->get();
         }else{
-            $data =clientesModel::with('lotes','polizaPagador','aseguradoPoliza')->where('status_id',$acceso->status_id)->orderBy('lote_id','asc')->limit(3000)->get();
+            $data =clientesModel::with('users','lotes','polizaPagador','aseguradoPoliza','contactos','agendamientos')->where('status_id',$acceso->status_id)->orderBy('lote_id','asc')->limit(3000)->get();
             //DETERMINO QUE SI LA VISTA DEBE MOSTRAR DATOS DE LA VENTA
             if($acceso->status_id==12){
                 $this->tipoGestion="back_end.manipulacion_ventas.index";

@@ -17,8 +17,11 @@
                     <div id="notificacion-datos-pagador-poliza"></div>
                     @if($pagador_poliza==null)
                         {!!Form::open(['route'=>'datos-pagador-polizap', 'method'=>'POST','class'=>'from-data','id'=>'datos-pagador-poliza'])!!}
+                        {{--LO REGRESO EN EL CONTROLADOR CUANDO GARDO Y EN JS LO RECARGO EN EL CONTROL--}}
+                        {!!Form::hidden('idPolizaPagadorCrorl',null,['id'=>'idPolizaPagadorCrorl'])!!}
                     @else
                         {!!Form::model($pagador_poliza,['route'=> ['datos-pagador-poliza',$pagador_poliza->id],'method'=>'PUT','class'=>'from-data','id'=>'datos-pagador-poliza'])!!}
+                        {!!Form::hidden('idPolizaPagadorCrorl',$pagador_poliza->id,['id'=>'idPolizaPagadorCrorl'])!!}
                     @endif
                     <div class="box-body contrPagadorPoliza">
                             @include('back_end.ventas.form.form-pagador-poliza')
@@ -36,19 +39,6 @@
 
     </div>
     <div role="tabpanel" class="tab-pane" id="aseguradospoliza">
-         <div class="row">
-            <div class="col-md-12">
-                <div class="box box-primary">
-                    <div class="box-header">
-                        <h3 class="box-title"> Listado </h3>
-                    </div>
-                    <div class="box-body listAseguradosPoliza">
-                        @include('back_end.ventas.form.list-datos-asegurados-poliza')
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="row">
             <div class="col-md-12">
                 <div class="box box-primary">
@@ -56,20 +46,20 @@
                         <h3 class="box-title">Asegurado Poliza - <b>{{$clientes->cliente}}</b> </h3>
                     </div>
 
-                    @if($poliza_asegurados->count() == 0)
+                    {{--@if($poliza_asegurados->count() == 0)--}}
                         <div id="notificacion-datos-asegurado-poliza"></div>
                         {!!Form::open(['route'=>'datos-asegurado-polizap', 'method'=>'POST','class'=>'from-data','id'=>'datos-asegurado-poliza'])!!}
-                        @else
-                        <div id="notificacion-datos-asegurado-poliza-update"></div>
-                        {!!Form::model($poliza_asegurados[0],['route'=> ['datos-asegurado-poliza',$poliza_asegurados[0]->id],'method'=>'PUT','class'=>'from-data','id'=>'datos-asegurado-poliza-update'])!!}
-                    @endif
+                        {{--@else--}}
+                        {{--<div id="notificacion-datos-asegurado-poliza-update"></div>--}}
+                        {{--{!!Form::model($poliza_asegurados[0],['route'=> ['datos-asegurado-poliza',$poliza_asegurados[0]->id],'method'=>'PUT','class'=>'from-data','id'=>'datos-asegurado-poliza-update'])!!}--}}
+                    {{--@endif--}}
                     <div class="box-body contrAseguradosPoliza">
                         @include('back_end.ventas.form.form-asegurados-poliza')
                         <?php  $class_direcciones="asegurados-poliza";?>
                         @include('back_end.ventas.form.form-direcciones')
                         <br>
                         <div class="col-md-12 col-md-offset-5">
-                            {!!Form::submit('Registrar',['class'=>'btn btn-primary','id'=>'btnaseguradospoliza'])!!}
+                            {!!Form::submit('Registrar',['class'=>'btn btn-primary','id'=>'btnaseguradospoliza',$ventas])!!}
                         </div>
                     </div>
                     {!!Form::close()!!}
@@ -78,40 +68,7 @@
         </div>
 
     </div>
-<!-- <div role="tabpanel" class="tab-pane" id="beneficiarios">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="box box-primary">
-                    <div class="box-header">
-                        <h3 class="box-title">Beneficiarios de la poliza - <b>{{$clientes->cliente}}</b> </h3>
-                    </div>
-                    <div id="notificacion-datos-beneficiarios-poliza"></div>
-                        {--Form::open(['route'=>'datos-beneficiariosp', 'method'=>'POST','class'=>'from-data','id'=>'datos-beneficiarios-poliza'])--}
-                    <div class="box-body contrBeneficiariosPoliza">
-                       {{-- @include('back_end.ventas.form.form-beneficiarios-poliza')--}}
-                        <br>
-                        <div class="col-md-12 col-md-offset-5">
-                          {{-- {!!Form::submit('Registrar',['class'=>'btn btn-primary','id'=>'btnregistrar'])!!}
-                        </div>
-                    </div>
-                    {!!Form::close()!!} --}}
-                </div>
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="box box-primary">
-                    <div class="box-header">
-                        <h3 class="box-title"> Listado de Beneficiarios </h3>
-                    </div>
-                    <div class="box-body listBeneficiarios">
-                     {{--  @include('back_end.ventas.beneficiarios.list-datos-beneficiarios') --}}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
     <div role="tabpanel" class="tab-pane" id="riesgoasegurable">
         <div class="row">
             <div class="col-md-6">
@@ -145,6 +102,19 @@
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title"> Listado de <b>Asegurados</b></h3>
+                    </div>
+                    <div class="box-body listAseguradosPoliza">
+                        @include('back_end.ventas.form.list-datos-asegurados-poliza')
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 
@@ -154,11 +124,6 @@
 
 @include('back_end.combos')
 <script type="text/javascript">
- // var  camposInput = ['nu_documento','nb_nombre','nb_apellido','ff_nacimiento','btnregistrar','edad','ff_registro','ff_ultima_actualizacion'];
- // var  campoSelect=['heredero_id','tipo_persona_id','nacionalidad_id','parentesco_id','tipobeneficiario_id'];
- // var  campoSelectCreate=['',''];
-
-
 
     $('.ff_nacimiento').datepicker({
         format: "dd-mm-yyyy",
@@ -228,7 +193,6 @@
      $("#edad").val(calcularEdad($(this).val()));
  });
 
- //$("#ff_nacimientoD").focusout(function(){$("#edadD").val(calcularEdad($(this).val()));});
 
     $('.formtelefono,.solonum').keypress(function(tecla) {
         if((tecla.charCode < 48 || tecla.charCode > 57) && (tecla.charCode != 0)) return false;
@@ -297,15 +261,26 @@
 
  }
     function nuevoAseguradoPoliza() {
-        var  camposInput = ['nb_nombre','nu_documento','nb_apellido','ff_nacimiento','nu_hijos','email','nu_tlf_celular','nb_empresa','nb_cargo','nu_ingresos','nu_tlf_oficina1','nu_tlf_oficina2','nu_tlf_hogar','nu_capital_promedio','nb_parroquia','co_postal','tx_avenida_calle','tx_urbanizacion_direccion','nb_edificio_casa','nu_piso','nu_casa','btnaseguradospoliza'];
-        var  campoSelect=['nacionalidad_id','tipo_persona_id','nivel_educativo_id','ocupacion_id','sexo_id','estadocivil_id','activida_economica_id','pais_id','estado_id','ciudad_id','municipio_id'];
-        $("#btnnuevoaseguradopoliza").removeAttr("disabled");
+        var  camposInput = ['nb_nombre','nu_documento','ff_nacimiento','nu_tlf_oficina1','nu_tlf_oficina2','nb_parroquia','co_postal','tx_avenida_calle','tx_urbanizacion_direccion','nb_edificio_casa','nu_piso','nu_casa','btnaseguradospoliza'];
+        var  campoSelect=['nacionalidad_id','tipo_persona_id','pais_id','estado_id','ciudad_id','municipio_id'];
+        var  camposInputBorrar = ['nb_apellido','nu_hijos','email','nu_tlf_celular','nb_empresa','nb_cargo','nu_ingresos','nu_tlf_hogar','nu_capital_promedio','edad'];
+        var  campoSelectBorrar=['nivel_educativo_id','ocupacion_id','sexo_id','estadocivil_id','activida_economica_id'];
+
+        $("#btnaseguradospoliza").removeAttr("disabled");
+        $(".btnnuevoaseguradopoliza").attr("disabled","disabled");
+
+        $.each(camposInputBorrar, function(i, val){
+            $('#datos-asegurado-poliza').find('input[name='+val+']').val('');
+        });
+        $.each(campoSelectBorrar, function(i, val){
+            $('#datos-asegurado-poliza').find('select[name='+val+']').val("").attr('selected', 'selected');
+        });
         $.each(camposInput, function(i, val){
             $('#datos-asegurado-poliza').find('input[name='+val+']').val('');
             $('#datos-asegurado-poliza').find('input[name='+val+']').removeAttr("disabled");
         });
         $.each(campoSelect, function(i, val){
-            $('#datos-asegurado-poliza').find('select[name='+val+'] option:first').attr('selected', 'selected');
+            $('#datos-asegurado-poliza').find('select[name='+val+']').val("").attr('selected', 'selected');
             $('#datos-asegurado-poliza').find('select[name='+val+']').removeAttr("disabled");
         });
     }

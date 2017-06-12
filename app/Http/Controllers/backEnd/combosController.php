@@ -60,28 +60,37 @@ class combosController extends Controller
         return response()->json($data);
     }
 
-    public function getRamo()
+    public function getRamo(request $request)
     {
-        $data =campanaModel::find($this->id)->ramos->where('status_id',1);
+        if($request->ramo_cliente=="undefined"):
+            $data =campanaModel::find($this->id)->ramos->where('status_id',1);
+        else:
+            $data=ramosModel::where('campana_id',$this->id)->whereIn('id',explode('-',$request->ramo_cliente))->active()->get();
+        endif;
         return response()->json($data);
     }
 
-    public function getProducto()
+    public function getProducto(request $request)
     {
-        $data =ramosModel::find($this->id)->productos->where('status_id',1);
-        return response()->json($data);
+        if($request->producto_cliente=="undefined"):
+            $data =ramosModel::find($this->id)->productos->where('status_id',1);
+          else:
+           $data=productosModel::where('ramo_id',$this->id)->whereIn('id',explode('-',$request->producto_cliente))->active()->get();
+        endif;
+
+          return response()->json($data);
     }
 
     public function getPlan(request $request)
     {
       //  \Debugbar::info(intval($request->plan_cliente));
 
-        if($request->plan_cliente=="undefined")
-        {
+        if($request->plan_cliente=="undefined"):
             $data =productosModel::find($this->id)->planes->where('status_id',1);
-        }else{
-            $data=planesModel::where('producto_id',$this->id)->whereIn('id',explode(',',$request->plan_cliente))->active()->get();
-        }
+          else:
+            $data=planesModel::where('producto_id',$this->id)->whereIn('id',explode('-',$request->plan_cliente))->active()->get();
+        endif;
+
         return response()->json($data);
     }
 
@@ -93,13 +102,15 @@ class combosController extends Controller
 
     public function getTarifario(request $request)
     {
-        $data =tarifarioModel::where("campana_id",$this->id)
-            ->where("campana_id",$request->id)
-            ->where("ramo_id",$request->idRamo)
-            ->where("producto_id",$request->idProducto)
-            ->where("plan_id",$request->idPlan)
-            ->where("frecuencia_pago_id",$request->idFrecuencia)
-            ->where('status_id',1)->get();
+        $data =tarifarioModel::with('rangoedad')->where("campana_id",$this->id)
+            ->where([
+                ["campana_id",$request->id],
+                ["ramo_id",$request->idRamo],
+                ["producto_id",$request->idProducto],
+                ["plan_id",$request->idPlan],
+                ["frecuencia_pago_id",$request->idFrecuencia],
+            ])->active()->get();
+
         return response()->json($data);
     }
 

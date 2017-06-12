@@ -266,8 +266,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('tpfnivel3/{id}', ['as' => 'tpfnivel3', 'uses' => 'backEnd\combosController@getTpfnivel3']);
     Route::get('ciudad/{id}', ['as' => 'ciudad', 'uses' => 'backEnd\combosController@getCiudad']);
     Route::get('municipio/{id}', ['as' => 'municipio', 'uses' => 'backEnd\combosController@getMunicipio']);
-    Route::get('ramos/{id}', ['as' => 'ramos', 'uses' => 'backEnd\combosController@getRamo']);
-    Route::get('producto/{id}', ['as' => 'producto', 'uses' => 'backEnd\combosController@getProducto']);
+    Route::get('ramos/{id}/{ramo_cliente}', ['as' => 'ramos', 'uses' => 'backEnd\combosController@getRamo']);
+    Route::get('producto/{id}/{producto_cliente}', ['as' => 'producto', 'uses' => 'backEnd\combosController@getProducto']);
     Route::get('plan/{id}/{plan_cliente}', ['as' => 'plan', 'uses' => 'backEnd\combosController@getPlan']);
     Route::get('coberturas/{id}', ['as' => 'coberturas', 'uses' => 'backEnd\combosController@getCoberturas']);
     Route::get('tarifario/{id}/{idRamo}/{idProducto}/{idPlan}/{idFrecuencia}', ['as' => 'tarifario', 'uses' => 'backEnd\combosController@getTarifario']);

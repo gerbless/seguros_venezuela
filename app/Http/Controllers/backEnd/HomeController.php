@@ -1,9 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\backEnd;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\User;
 use App\Model\submenuModel;
 use App\Model\menuModel;
 use Redirect;

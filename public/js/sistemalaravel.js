@@ -75,52 +75,44 @@ $(document).on("submit",".from-data",function(e){
 
                 //FORMULARIO DATOS BENEFICIARIOS POLIZA
                 case "datos-beneficiarios-asegurados":
-                    var  $nodes  = $('.contrBeneficiariosAseguradosPoliza').children();
-                     $($nodes).children().each(  function(i,val) {
-                       if(val!=undefined)  $(val).attr("disabled","disabled");
-                     });
+                    if(resul.hinabilty=="S")
+                    {
+                        var  $nodes  = $('.contrBeneficiariosAseguradosPoliza').children();
+                        $($nodes).children().each(  function(i,val) {
+                            if(val!=undefined)  $(val).attr("disabled","disabled");
+                        });
+
+                    }
                     $("#notificacion-"+id).html(menj(resul.tipo,resul.menj)).show(500);
                     setTimeout(function () {
                         $("#notificacion-"+id).hide(500);
                         $(".btnnuevobeneficiario").removeAttr("disabled");
-
-                        $.get(resul.list,function(resulda){
-                            $(".listBeneficiarios").html(resulda);
-                        });
+                        if(resul.hinabilty=="S")
+                        {
+                            $.get(resul.list,function(resulda){
+                                $(".listBeneficiarios").html(resulda);
+                            });
+                        }
                     },3000);
                     break;
 
-                //FORMULARIO DATOS RIESGOS ASEGURABLES
-               /*
-                 case "datos-riesgos-asegurables":
-                    var  $nodes  = $('.contrDatosRiesgoAsegurables').children();
-                    $($nodes).children().each(  function(i,val) {
-                        if(val!=undefined)  $(val).attr("disabled","disabled");
-                    });
-                    $("#notificacion-"+id).html(menj(resul.tipo,resul.menj)).show(500);
-                    setTimeout(function () {
-                        $("#notificacion-"+id).hide(500);
-                        $(".btnnuevodatosriesgosasegurables").removeAttr("disabled");
-
-                        $.get(resul.list,function(resulda){
-                            $(".listDatosRiesgoAsegurables").html(resulda);
-                        });
-                    },3000);
-                    break;
-                */
                 case "datos-asegurado-poliza":
-                    var  $nodes  = $('.contrAseguradosPoliza').children();
-                    $($nodes).children().each(  function(i,val) {
-                        if(val!=undefined)  $(val).attr("disabled","disabled");
-                    });
+                    if(resul.hinabilty=="S")
+                    {
+                        var  $nodes  = $('.contrAseguradosPoliza').children();
+                        $($nodes).children().each(  function(i,val) {
+                            if(val!=undefined)  $(val).attr("disabled","disabled");
+                        });
+                    }
                     $("#notificacion-"+id).html(menj(resul.tipo,resul.menj)).show(500);
                     setTimeout(function () {
                         $("#notificacion-"+id).hide(500);
                         $(".btnnuevoaseguradopoliza").removeAttr("disabled");
-
-                        $.get(resul.list,function(resulda){
-                            $(".listAseguradosPoliza").html(resulda);
-                        });
+                        if(resul.hinabilty=="S") {
+                            $.get(resul.list, function (resulda) {
+                                $(".listAseguradosPoliza").html(resulda);
+                            });
+                        }
                     },3000);
                     break;
 
@@ -138,14 +130,20 @@ $(document).on("submit",".from-data",function(e){
                     break;
 
                 case "datos-pagador-poliza":
-                    var  $nodes  = $('.contrPagadorPoliza').children();
-                    $($nodes).children().each(  function(i,val) {
-                        if(val!=undefined)  $(val).attr("disabled","disabled");
-                    });
+                    if(resul.hinabilty=="S")
+                    {
+                        var  $nodes  = $('.contrPagadorPoliza').children();
+                        $($nodes).children().each(  function(i,val) {
+                            if(val!=undefined)  $(val).attr("disabled","disabled");
+                        });
+                    }
+                    $(".btnnuevoaseguradopoliza").removeAttr("disabled");
+
+
                     $("#notificacion-"+id).html(menj(resul.tipo,resul.menj)).show(500);
                     setTimeout(function () {
                         $("#notificacion-"+id).hide(500);
-                    },3000);
+                    },10000);
                     break;
 
                 case "datos-txt":
@@ -158,6 +156,9 @@ $(document).on("submit",".from-data",function(e){
                      {$("#notificacion-"+id).hide(500);
                          setTimeout(function () {
                              if(typeof resul.ruta !="undefined") cargarlistado(resul.ruta);
+                             if (typeof $("#btnaseguradospoliza") != undefined){
+                                 $("#btnaseguradospoliza").attr("disabled","disabled");
+                             }
                          },2000)
                     },3000);
 
