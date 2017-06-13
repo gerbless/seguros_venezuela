@@ -133,6 +133,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('listado-datos-poliza-asegurados/{idCliente}', 'backEnd\vetasController@listadoPolizaAsegurados');
 
     //TABLAS MAESTRAS
+    //
+    Route::get('listar-rango', 'backEnd\tablasMaestras\rangoedadController@index');
+    Route::get('create-rango', 'backEnd\tablasMaestras\rangoedadController@create');
+    Route::post('create-rango', ['as' => 'create-rango', 'uses' => 'backEnd\tablasMaestras\rangoedadController@store']);
+    Route::get('editar-rango/{idRango}', 'backEnd\tablasMaestras\rangoedadController@edit');
+    Route::put('editar-rango/{idRango}', ['as' => 'editar-rango', 'uses' => 'backEnd\tablasMaestras\rangoedadController@update']);
+
      // AGECIAS
     Route::get('listado-agencia', 'backEnd\tablasMaestras\agenciasController@index');
     Route::get('create-agencia', 'backEnd\tablasMaestras\agenciasController@create');
